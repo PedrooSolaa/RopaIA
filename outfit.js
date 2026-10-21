@@ -4,7 +4,7 @@ export const N = {
   camiseta: 'Camiseta', polo: 'Polo', camisa: 'Camisa',
   jersey: 'Jersey', sudadera: 'Sudadera', chaqueta: 'Chaqueta',
   largo: 'Pantalón largo', corto: 'Pantalón corto', calzado: 'Calzado',
-  // Nombres de "hueco" para el mensaje de prendas que faltan
+  // Nombres de "hueco" para el mensaje cuando no hay ninguna prenda
   base: 'Camiseta, polo o camisa',
   media: 'Jersey o sudadera',
   piernas: 'Pantalón'
@@ -53,12 +53,14 @@ function huecos(T, ropa) {
   return h;
 }
 
-// Devuelve { faltan: [...] } o { outfit: [...] }
+// Devuelve { faltan: [...] } (solo si no hay ninguna prenda útil) o { outfit: [...] }
 export function recomendar(ropa, T) {
-  const slots = huecos(T, ropa);
+  const todos = huecos(T, ropa);
   const por = s => ropa.filter(p => s.cats.includes(p.cat));
-  const faltan = slots.filter(s => !por(s).length).map(s => N[s.id] ? s.id : s.cats[0]);
-  if (faltan.length) return { faltan };
+
+  // Solo los huecos que tienen al menos una prenda: los vacíos se saltan
+  const slots = todos.filter(s => por(s).length);
+  if (!slots.length) return { faltan: todos.map(s => s.id) };
 
   let mejor = null, max = -Infinity;
   (function probar(i, actual) {
@@ -68,7 +70,7 @@ export function recomendar(ropa, T) {
       const resto = actual.filter(p => p !== calzado);
       for (let a = 0; a < resto.length; a++)
         for (let b = a + 1; b < resto.length; b++) s += puntuarPar(resto[a], resto[b]);
-      resto.forEach(p => s += puntuarPar(calzado, p) * .5);
+      if (calzado) resto.forEach(p => s += puntuarPar(calzado, p) * .5);
       s += Math.random() * .5; // para que varíe si hay empates
       if (s > max) { max = s; mejor = [...actual]; }
       return;
