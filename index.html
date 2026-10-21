@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <title>Mi outfit</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#2f6fed">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>👕 Mi outfit en Toledo</h1>
+
+    <section class="c">
+        <h2>Temperatura</h2>
+        <input id="temp" type="number" value="18"> °C
+        <button id="btnClima">Clima de Toledo</button>
+        <div id="estadoClima" class="nota"></div>
+    </section>
+
+    <section class="c">
+        <h2>Añadir ropa</h2>
+        <label class="btn">📷 Subir fotos
+            <input id="fotos" type="file" accept="image/*" multiple hidden>
+        </label>
+        <div id="estado" class="nota">La IA detecta el tipo de prenda sola.</div>
+    </section>
+
+    <section class="c">
+        <h2>Outfit recomendado</h2>
+        <div id="outfit">Añade prendas.</div>
+        <button id="btnRec">Recomendar</button>
+    </section>
+
+    <section class="c">
+        <h2>Mi armario</h2>
+        <div class="g" id="armario"></div>
+    </section>
+
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>
